@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>yzy</title>
+<link rel="icon" type="image/png" href="https://commons.wikimedia.org/wiki/File:Mossad_seal.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yzy.wtf/x">
+<meta property="og:title" content="mossad">
+<meta property="og:description" content="hi :p">
+<meta property="og:image" content="https://i.ibb.co/PZnLP6hv/IMG-1649.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i.ibb.co/PZnLP6hv/IMG-1649.png">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { min-height:100%; }
+@supports (height: 100dvh) {
+  html, body { min-height:100dvh; }
+}
+body { background:#050505; color:#ececf1; font-family:"Inter",sans-serif; overflow-x:hidden; }
+body { display:flex; align-items:center; justify-content:center; padding:20px 0; }
+main { margin:0 auto; }
+#bg { position:fixed; inset:0; z-index:-2; background:#050505; }
+#bg img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+#bg-desktop { display:block; }
+#bg-mobile { display:none; }
+@media (max-width: 768px) {
+  #bg-desktop { display:none; }
+  #bg-mobile { display:block; }
+}
+#bg::after { content:""; position:absolute; inset:0; background:rgba(0,0,0,.45); }
+#enter { position:fixed; inset:0; background:#050505; z-index:100; display:flex;
+  align-items:center; justify-content:center; cursor:pointer; transition:opacity .8s; }
+#enter.off { opacity:0; pointer-events:none; }
+#enter span { font-family:"Unbounded",sans-serif; font-size:.85rem; letter-spacing:.35em;
+  background:linear-gradient(120deg,#e5e5e5,#8a8a8a); -webkit-background-clip:text; background-clip:text;
+  color:transparent; animation:pulse 1.8s infinite; }
+@keyframes pulse { 0%,100%{opacity:.35} 50%{opacity:1} }
+.card { width:min(400px,90vw); background:rgba(14,14,18,.35);
+  backdrop-filter:blur(18px) saturate(1.2); -webkit-backdrop-filter:blur(18px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.1); border-radius:20px;
+  padding-bottom:26px; text-align:center; opacity:0; transform:translateY(30px);
+  transition:all .8s cubic-bezier(.22,1,.36,1); box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden; }
+.card.show { opacity:1; transform:none; }
+.banner { position:relative; height:140px; border-radius:0; background:transparent;
+  overflow:hidden; transition:height .4s cubic-bezier(.22,1,.36,1); }
+#pdeco { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none; }
+.avatar-wrap { position:relative; width:108px; margin:-50px auto 0; }
+#nameplate { position:absolute; top:50%; left:50%; width:220px; height:120px;
+  transform:translate(-50%,-56%); pointer-events:none; z-index:-1; }
+#deco { position:absolute; top:50%; left:50%; width:150px; height:150px;
+  transform:translate(-50%,-53%); pointer-events:none; z-index:-1; }
+#logoWatermark { position:absolute; top:38%; left:50%; width:210px; height:210px;
+  transform:translate(-50%,-50%); object-fit:contain; opacity:.14;
+  filter:grayscale(1) contrast(1.15); pointer-events:none; z-index:1; transition:opacity .3s ease; }
+#avatar { width:108px; height:108px; border-radius:50%; border:4px solid rgba(14,14,18,.4);
+  background:#18181b; object-fit:cover; box-shadow:0 0 0 2px rgba(139,92,246,.35); }
+#dot { position:absolute; bottom:6px; right:4px; width:22px; height:22px;
+  border-radius:50%; border:3px solid rgba(14,14,18,.5); background:#747f8d; z-index:6; }
+#dot.online { background:#23a55a; box-shadow:0 0 10px rgba(35,165,90,.7); }
+#dot.idle { background:#f0b232; }
+#dot.dnd { background:#f23f43; }
+.username { font-family:"Unbounded",sans-serif; font-size:1.45rem; margin-top:14px;
+  text-shadow:0 2px 10px rgba(0,0,0,.6); }
+.handle { color:#b9b9c4; font-size:.85rem; margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.6); }
+.handle-wrap { position:relative; display:flex; align-items:center; justify-content:center; gap:6px;
+  margin-top:5px; text-shadow:0 1px 6px rgba(0,0,0,.6); }
+.handle-wrap .handle { margin-top:0; }
+.handle-wrap .handle-badge { width:18px; height:18px; object-fit:contain;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,.6)); flex-shrink:0; cursor:pointer; transition:transform .15s ease; }
+.handle-wrap .handle-badge:active { transform:scale(.88); }
+.badge-popup { position:fixed; top:18px; left:50%; display:flex; align-items:center; gap:9px;
+  white-space:nowrap; background:rgba(28,28,34,.92); backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.14); border-radius:999px;
+  padding:9px 18px 9px 10px; font-size:.85rem; font-weight:600; letter-spacing:.01em; color:#ececf1;
+  box-shadow:0 14px 34px rgba(0,0,0,.55), 0 0 0 1px rgba(0,0,0,.2); opacity:0;
+  transform:translate(-50%,-140%); pointer-events:none;
+  transition:opacity .32s cubic-bezier(.34,1.56,.64,1), transform .32s cubic-bezier(.34,1.56,.64,1); z-index:300; }
+.badge-popup.show { opacity:1; transform:translate(-50%,0); }
+.badge-popup img { width:22px; height:22px; flex-shrink:0; display:block; }
+.badges { display:flex; justify-content:center; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.badges img { width:22px; height:22px; }
+.bio { margin:16px 30px 0; font-size:.9rem; color:#d5d5de; line-height:1.6; text-shadow:0 1px 6px rgba(0,0,0,.6); }
+.box[hidden], #spbox[hidden], #actbox[hidden],
+#deco[hidden], #nameplate[hidden], #pdeco[hidden] { display:none !important; }
+.box { margin:18px 20px 0; background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:12px; text-align:left; }
+.label { font-size:.65rem; text-transform:uppercase; letter-spacing:.2em; color:#a9a9b4; margin-bottom:8px; }
+.act { display:flex; gap:12px; align-items:center; }
+.act + .act { margin-top:12px; }
+.act img { width:56px; height:56px; border-radius:10px; object-fit:cover; }
+.act b { font-size:.9rem; }
+.act small, .muted { color:#a9a9b4; font-size:.8rem; display:block; }
+.spotify { display:flex; align-items:center; gap:12px; }
+#song { color:#1db954; font-weight:600; font-size:.9rem; text-decoration:none;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block; }
+#bar { height:4px; background:rgba(255,255,255,.15); border-radius:4px; margin-top:6px; }
+#fill { height:100%; width:0; background:#1db954; border-radius:4px; transition:width 1s linear; }
+@media (max-width: 480px) {
+  .card.socials-open .banner { height:75px; }
+  .card.socials-open #logoWatermark { opacity:0; }
+}
+.socials-toggle { display:flex; align-items:center; justify-content:center; gap:6px;
+  width:calc(100% - 40px); margin:22px 20px 0; padding:11px; background:transparent; border:none;
+  cursor:pointer; font-family:inherit; font-size:.78rem; font-weight:600; text-transform:uppercase;
+  letter-spacing:.18em; color:#a9a9b4; transition:color .2s; }
+.socials-toggle:hover { color:#ececf1; }
+.socials-toggle .chev { transition:transform .3s cubic-bezier(.22,1,.36,1); flex-shrink:0; }
+.socials-toggle[aria-expanded="true"] .chev { transform:rotate(90deg); }
+.links { display:flex; flex-direction:column; gap:10px; margin:0 20px 0;
+  max-height:0; opacity:0; overflow:hidden;
+  transition:max-height .4s cubic-bezier(.22,1,.36,1), opacity .3s ease, margin-top .4s ease; }
+.links.open { max-height:600px; opacity:1; margin-top:10px; }
+.links a { display:flex; align-items:center; justify-content:center; gap:10px; padding:13px;
+  border-radius:12px; background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12);
+  color:#ececf1; text-decoration:none; font-size:.92rem; font-weight:600; transition:.25s;
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
+.links a:hover { transform:translateY(-2px); border-color:rgba(139,92,246,.5);
+  box-shadow:0 8px 24px rgba(139,92,246,.25); background:rgba(255,255,255,.1); }
+.links img { width:20px; height:20px; }
+.links a.copyable { cursor:pointer; }
+#views { margin-top:18px; font-size:.72rem; color:#b9b9c4; letter-spacing:.15em;
+  text-shadow:0 1px 6px rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; gap:6px; }
+#views svg { flex-shrink:0; opacity:.8; }
+#presence { margin-top:8px; font-size:.72rem; color:#b9b9c4; letter-spacing:.1em;
+  text-shadow:0 1px 6px rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; gap:7px; }
+#presence[hidden] { display:none; }
+#presenceDot { position:relative; width:8px; height:8px; border-radius:50%; background:#23a55a;
+  box-shadow:0 0 6px rgba(35,165,90,.8); flex-shrink:0; }
+#presenceDot::after { content:""; position:absolute; inset:-4px; border-radius:50%;
+  background:rgba(35,165,90,.55); animation:presencePulse 1.8s ease-out infinite; }
+@keyframes presencePulse { 0%{ transform:scale(.4); opacity:.8; } 100%{ transform:scale(1.8); opacity:0; } }
+@media (max-width: 480px) {
+  .card.compact .username, .card.compact .handle, .card.compact .bio,
+  .card.compact .act b, .card.compact .act small,
+  .card.compact .links a span { letter-spacing:-0.01em; }
+  .card.compact .label { letter-spacing:.12em; }
+  .card.compact #views { letter-spacing:.08em; }
+}
+@media (max-height: 560px) {
+  body { padding:8px 0; }
+  .banner { height:80px; }
+  .avatar-wrap { width:72px; margin-top:-34px; }
+  #avatar { width:72px; height:72px; }
+  .username { font-size:1.05rem; margin-top:6px; }
+  .bio { margin:6px 22px 0; font-size:.78rem; line-height:1.35; }
+  .box { margin-top:8px; padding:7px; }
+  .links { margin:10px 14px 0; gap:5px; }
+  .links a { padding:8px; font-size:.8rem; }
+}
+#musicWidget { position:fixed; bottom:16px; right:16px; z-index:150; display:flex; align-items:center;
+  gap:10px; padding:8px 10px; border-radius:14px; cursor:pointer; user-select:none;
+  background:rgba(14,14,18,.65); backdrop-filter:blur(14px) saturate(1.2);
+  -webkit-backdrop-filter:blur(14px) saturate(1.2); border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 10px 30px rgba(0,0,0,.5); opacity:0; pointer-events:none; transform:translateY(10px);
+  transition:opacity .5s, transform .5s; }
+#musicWidget.on { opacity:1; pointer-events:auto; transform:none; }
+#musicWidget:hover { border-color:rgba(139,92,246,.5); }
+@media (max-width: 500px) {
+  #musicWidget { bottom:12px; right:12px; padding:6px 8px; gap:8px; border-radius:12px; }
+  #mw-disc { width:26px; height:26px; }
+  #mw-disc::after { width:4px; height:4px; }
+  #mw-eq { height:12px; }
+  #mw-eq span { width:2px; }
+  #musicWidget.playing #mw-eq span:nth-child(1) { animation-name:eq1m; }
+  #musicWidget.playing #mw-eq span:nth-child(2) { animation-name:eq2m; }
+  #musicWidget.playing #mw-eq span:nth-child(3) { animation-name:eq3m; }
+  #musicWidget.playing #mw-eq span:nth-child(4) { animation-name:eq4m; }
+  @keyframes eq1m { 0%,100%{height:3px} 20%{height:8px} 45%{height:5px} 70%{height:11px} 88%{height:6px} }
+  @keyframes eq2m { 0%,100%{height:6px} 25%{height:3px} 50%{height:9px} 75%{height:5px} 90%{height:11px} }
+  @keyframes eq3m { 0%,100%{height:9px} 20%{height:5px} 45%{height:11px} 70%{height:3px} 88%{height:7px} }
+  @keyframes eq4m { 0%,100%{height:4px} 30%{height:10px} 55%{height:6px} 75%{height:8px} 92%{height:3px} }
+}
+#mw-disc { width:30px; height:30px; border-radius:50%; flex-shrink:0;
+  background:radial-gradient(circle at center, #8b5cf6 0 18%, #1a1a1f 19% 60%, #0a0a0d 61% 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.15), 0 0 14px rgba(139,92,246,.35); position:relative; }
+#musicWidget.playing #mw-disc { animation:spin 8s linear infinite; }
+#mw-disc::after { content:""; position:absolute; top:50%; left:50%; width:4px; height:4px;
+  border-radius:50%; background:#ececf1; transform:translate(-50%,-50%); }
+@keyframes spin { to { transform:rotate(360deg); } }
+#mw-eq { display:flex; align-items:flex-end; gap:3px; height:14px; flex-shrink:0; }
+#mw-eq span { width:3px; border-radius:2px; background:#1db954; height:4px; transition:height .3s ease-out; }
+#musicWidget.playing #mw-eq span:nth-child(1) { animation:eq1 3.2s ease-in-out infinite; }
+#musicWidget.playing #mw-eq span:nth-child(2) { animation:eq2 4.6s ease-in-out infinite; }
+#musicWidget.playing #mw-eq span:nth-child(3) { animation:eq3 2.7s ease-in-out infinite; }
+#musicWidget.playing #mw-eq span:nth-child(4) { animation:eq4 3.9s ease-in-out infinite; }
+@keyframes eq1 { 0%,100%{height:4px} 18%{height:9px} 34%{height:6px} 52%{height:13px} 70%{height:7px} 86%{height:10px} }
+@keyframes eq2 { 0%,100%{height:7px} 22%{height:4px} 41%{height:11px} 58%{height:5px} 74%{height:14px} 90%{height:6px} }
+@keyframes eq3 { 0%,100%{height:10px} 15%{height:5px} 30%{height:14px} 47%{height:4px} 65%{height:8px} 82%{height:12px} }
+@keyframes eq4 { 0%,100%{height:5px} 27%{height:12px} 44%{height:6px} 61%{height:10px} 78%{height:4px} 92%{height:9px} }
+#musicWidget.muted #mw-eq span { animation:none !important; height:4px; background:#3a6b4c; }
+#musicWidget.muted #mw-disc { animation-play-state:paused; filter:grayscale(.6); opacity:.6; }
+#toast { position:fixed; left:50%; bottom:28px; transform:translate(-50%,16px);
+  background:rgba(20,20,26,.95); border:1px solid rgba(139,92,246,.4); color:#ececf1;
+  padding:10px 18px; border-radius:10px; font-size:.85rem; opacity:0; pointer-events:none;
+  transition:.3s; z-index:200; box-shadow:0 10px 30px rgba(0,0,0,.6); }
+#toast.on { opacity:1; transform:translate(-50%,0); }
+</style>
+</head>
+
+<body>
+
+<div id="bg">
+  <img id="bg-desktop" src="https://i.pinimg.com/originals/d3/75/42/d375422c9b36938a21321fd4e34c6e0e.gif" alt="">
+  <img id="bg-mobile" src="https://i.pinimg.com/originals/d3/75/42/d375422c9b36938a21321fd4e34c6e0e.gif" alt="">
+</div>
+
+<div id="enter"><span>[ click to enter ]</span></div>
+
+<main class="card" id="card">
+  <div id="mainView">
+    <div class="banner" id="banner">
+      <img id="logoWatermark" src="https://i.ibb.co/PZnLP6hv/IMG-1649.png" alt="">
+      <img id="pdeco" alt="" hidden>
+    </div>
+    <div class="avatar-wrap">
+      <video id="nameplate" autoplay loop muted playsinline hidden></video>
+      <img id="deco" alt="" hidden>
+      <img id="avatar" alt="">
+      <div id="dot"></div>
+    </div>
+    <h1 class="username" id="uname">yzy</h1>
+    <div class="handle-wrap" id="handleWrap">
+      <p class="handle" id="handle"></p>
+      <img class="handle-badge" id="verifiedBadge"
+           src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngmart.com%2Ffiles%2F12%2FTikTok-Verified-Badge-PNG-Photos.png&f=1&nofb=1&ipt=f4196ea19941dec7f79de1d41ccfade495511a3501e04ac8b55a25c89303143e"
+           alt="verified">
+      <div class="badge-popup" id="badgePopup">
+        <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pngmart.com%2Ffiles%2F12%2FTikTok-Verified-Badge-PNG-Photos.png&f=1&nofb=1&ipt=f4196ea19941dec7f79de1d41ccfade495511a3501e04ac8b55a25c89303143e" alt="">
+        <span>Verified</span>
+      </div>
+    </div>
+    <div class="badges" id="badges"></div>
+    <p class="bio" id="bio"></p>
+
+    <div class="box" id="actbox" hidden>
+      <div class="label">activity</div>
+      <div id="acts"></div>
+    </div>
+
+    <div class="box spotify" id="spbox" hidden>
+      <img id="spart" alt="" style="width:56px;height:56px;border-radius:10px;object-fit:cover;">
+      <div style="flex:1;min-width:0;">
+        <a id="song" target="_blank" rel="noopener"></a>
+        <span class="muted" id="artist"></span>
+        <div id="bar"><div id="fill"></div></div>
+      </div>
+    </div>
+
+    <button class="socials-toggle" id="socialsToggle" type="button" aria-expanded="false">
+      <span>Socials</span>
+      <svg class="chev" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 1L7 5L2 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <nav class="links" id="links"></nav>
+
+    <div id="views">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span id="viewsCount">– views</span>
+    </div>
+    <div id="presence" hidden>
+      <span id="presenceDot"></span>
+      <span id="presenceCount">– here now</span>
+    </div>
+  </div>
+</main>
+
+<audio id="bgmusic" loop preload="auto"></audio>
+
+<div id="musicWidget" title="click to pause / resume">
+  <div id="mw-disc"></div>
+  <div id="mw-eq"><span></span><span></span><span></span><span></span></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+var CONFIG = {
+  id: "1489019129728995509",
+  slug: "x",
+  bio: "hi :p",
+  music: "https://dn711007.ca.archive.org/0/items/addison-addison-rae_202605/Fame%20Is%20A%20Gun.mp3",
+  musicVolume: 0.45,
+  links: [
+    { name: "github", url: "https://github.com/cuwm",
+      icon: "https://cdn.simpleicons.org/github/ffffff", copy: false },
+    { name: "discord", url: "https://discord.com/users/1489019129728995509",
+      icon: "https://cdn.simpleicons.org/discord/ffffff", copy: true },
+    { name: "telegram", url: "https://t.me/realsistrs",
+      icon: "https://cdn.simpleicons.org/telegram/26A5E4", copy: false }
+  ],
+  firebaseDbUrl: "https://guestbook-a7de7-default-rtdb.firebaseio.com"
+};
+
+(function () {
+  var discordUser = null;
+
+  function $(x) { return document.getElementById(x); }
+
+  function badgeUrl(hash)      { return "https://cdn.discordapp.com/badge-icons/" + hash + ".png"; }
+  function decoPresetUrl(hash) { return "https://cdn.discordapp.com/avatar-decoration-presets/" + hash + ".png?size=160&passthrough=true"; }
+  function profileDecoUrl(hash){ return "https://cdn.discordapp.com/assets/content/" + hash; }
+  function nameplateUrl(np)    {
+    return "https://cdn.discordapp.com/assets/collectibles/nameplates/" +
+           np.collection + "/" + np.name + "/asset.webm";
+  }
+
+  var musicWidget = $("musicWidget");
+  var musicOn = false;
+
+  if (CONFIG.music) {
+    var preAudio = $("bgmusic");
+    preAudio.src = CONFIG.music;
+    preAudio.volume = CONFIG.musicVolume;
+    preAudio.loop = true;
+    preAudio.load();
+  }
+
+  function startMusic() {
+    if (!CONFIG.music) return;
+    var audio = $("bgmusic");
+    var p = audio.play();
+    if (p && p.catch) p.catch(function () {
+      toast("couldn't play music :(");
+    });
+    musicOn = true;
+    musicWidget.classList.remove("muted");
+    musicWidget.classList.add("on", "playing");
+  }
+
+  musicWidget.addEventListener("click", function (e) {
+    e.stopPropagation();
+    var audio = $("bgmusic");
+    if (musicOn) {
+      audio.pause();
+      musicOn = false;
+      musicWidget.classList.add("muted");
+      musicWidget.classList.remove("playing");
+    } else {
+      audio.play().catch(function () {});
+      musicOn = true;
+      musicWidget.classList.remove("muted");
+      musicWidget.classList.add("playing");
+    }
+  });
+
+  var toastTimer;
+  function toast(msg) {
+    var t = $("toast");
+    t.textContent = msg;
+    t.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("on"); }, 2200);
+  }
+
+  function copyText(text, cb) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { cb(true); }, function () { cb(false); });
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { cb(document.execCommand("copy")); } catch (e) { cb(false); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  function showBox(el) { el.hidden = false; el.style.display = ""; updateCompact(); }
+  function hideBox(el) { el.hidden = true; el.style.display = "none"; updateCompact(); }
+
+  function updateCompact() {
+    var actVisible = !$("actbox").hidden;
+    var spVisible = !$("spbox").hidden;
+    $("card").classList.toggle("compact", actVisible || spVisible);
+  }
+
+  (function () {
+    var badge = $("verifiedBadge");
+    var popup = $("badgePopup");
+    if (!badge || !popup) return;
+    var hideTimer;
+    function showPopup() {
+      popup.classList.add("show");
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(hidePopup, 2200);
+    }
+    function hidePopup() { popup.classList.remove("show"); }
+    badge.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (popup.classList.contains("show")) hidePopup(); else showPopup();
+    });
+    document.addEventListener("click", function () { hidePopup(); });
+    popup.addEventListener("click", function (e) { e.stopPropagation(); });
+  })();
+
+  $("enter").onclick = function () {
+    this.classList.add("off");
+    $("card").classList.add("show");
+    load();
+    loadDstn();
+    startMusic();
+  };
+
+  $("bio").textContent = CONFIG.bio;
+  $("handle").textContent = "@" + CONFIG.slug;
+
+  CONFIG.links.forEach(function (l) {
+    var a = document.createElement("a");
+    a.href = l.url;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.innerHTML = '<img src="' + l.icon + '" alt=""><span>' + l.name + '</span>';
+    if (l.copy) {
+      a.classList.add("copyable");
+      a.addEventListener("click", function (e) {
+        if (!discordUser) return;
+        e.preventDefault();
+        copyText(discordUser, function (ok) {
+          toast(ok ? "copied @" + discordUser : "couldn't copy :(");
+        });
+      });
+    }
+    $("links").appendChild(a);
+  });
+
+  var socialsToggle = $("socialsToggle");
+  var linksNav = $("links");
+  var card = $("card");
+  socialsToggle.addEventListener("click", function () {
+    var open = linksNav.classList.toggle("open");
+    socialsToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    card.classList.toggle("socials-open", open);
+  });
+
+  var VIEW_WINDOW_MS = 15 * 60 * 1000;
+
+  var gbClientIp = null;
+  function getClientIp() {
+    if (gbClientIp) return Promise.resolve(gbClientIp);
+    return fetch("https://api.ipify.org?format=json")
+      .then(function (r) { return r.json(); })
+      .then(function (d) { gbClientIp = d.ip; return gbClientIp; })
+      .catch(function () { return null; });
+  }
+  function ipKey(ip) { return ip.replace(/[.#$\[\]:]/g, "_"); }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function fbIsRulesError(obj) {
+    return !!(obj && typeof obj === "object" && typeof obj.error === "string");
+  }
+
+  function showViewCount() {
+    fetch(CONFIG.firebaseDbUrl + "/views.json")
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (typeof d === "number") {
+          $("viewsCount").textContent = d + " views";
+        } else if (fbIsRulesError(d)) {
+          $("viewsCount").textContent = "views unavailable";
+        }
+      })
+      .catch(function () {});
+  }
+
+  function loadViews() {
+    if (!CONFIG.firebaseDbUrl || CONFIG.firebaseDbUrl.indexOf("YOUR-PROJECT") !== -1) return;
+    getClientIp().then(function (ip) {
+      if (!ip) { showViewCount(); return; }
+      var rateUrl = CONFIG.firebaseDbUrl + "/viewIps/" + ipKey(ip) + ".json";
+      fetch(rateUrl).then(function (r) { return r.json(); }).then(function (lastTs) {
+        if (fbIsRulesError(lastTs)) { showViewCount(); return; }
+        var now = Date.now();
+        if (typeof lastTs === "number" && (now - lastTs) < VIEW_WINDOW_MS) { showViewCount(); return; }
+        fetch(CONFIG.firebaseDbUrl + "/views.json", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ".sv": { "increment": 1 } })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function (d) {
+            if (typeof d === "number") $("viewsCount").textContent = d + " views";
+          })
+          .catch(function () {});
+        fetch(rateUrl, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(now)
+        }).catch(function () {});
+      }).catch(function () { showViewCount(); });
+    });
+  }
+  loadViews();
+
+  function loadPresence() {
+    if (!CONFIG.firebaseDbUrl || CONFIG.firebaseDbUrl.indexOf("YOUR-PROJECT") !== -1) return;
+    if (typeof firebase === "undefined") return;
+    try { firebase.initializeApp({ databaseURL: CONFIG.firebaseDbUrl }); } catch (e) { return; }
+    var db = firebase.database();
+    var myId = "p" + Date.now() + Math.random().toString(16).slice(2);
+    var myRef = db.ref("presence/" + myId);
+    var presenceEl = $("presence");
+    var countEl = $("presenceCount");
+    db.ref(".info/connected").on("value", function (snap) {
+      if (snap.val() !== true) return;
+      myRef.onDisconnect().remove();
+      myRef.set(true).catch(function () {});
+    });
+    db.ref("presence").on("value", function (snap) {
+      countEl.textContent = snap.numChildren() + " here now";
+      presenceEl.hidden = false;
+    }, function () { presenceEl.hidden = true; });
+  }
+  loadPresence();
+
+  /* ---------- discord profile ---------- */
+  function loadDstn() {
+    fetch("https://dcdn.dstn.to/profile/" + CONFIG.id)
+      .then(function (r) { return r.json(); })
+      .then(function (p) {
+        if (!p || !p.user) return;
+        var u = p.user;
+
+        var b = $("badges");
+        b.innerHTML = "";
+        (p.badges || []).forEach(function (bd) {
+          var hash = typeof bd.icon === "string" ? bd.icon.replace(/\.(png|gif|webp)$/i, "") : null;
+          var src = hash ? badgeUrl(hash) : (bd.icon_url || null);
+          if (!src) return;
+          var img = document.createElement("img");
+          img.src = src;
+          img.title = bd.description || bd.id || "";
+          img.alt = img.title;
+          b.appendChild(img);
+        });
+
+        var deco = $("deco");
+        var decoData = u.avatar_decoration_data;
+        if (decoData && decoData.asset) { deco.src = decoPresetUrl(decoData.asset); showBox(deco); }
+        else { hideBox(deco); }
+
+        var pdecoHash = null;
+        if (u.profile_effect && typeof u.profile_effect === "string") pdecoHash = u.profile_effect;
+        else if (u.profile_effect && u.profile_effect.asset) pdecoHash = u.profile_effect.asset;
+        var pdeco = $("pdeco");
+        if (pdecoHash) { pdeco.src = profileDecoUrl(pdecoHash); showBox(pdeco); }
+        else { hideBox(pdeco); }
+
+        var np = null;
+        if (u.collectibles && u.collectibles.nameplate) np = u.collectibles.nameplate;
+        else if (u.nameplate) np = u.nameplate;
+        var vid = $("nameplate");
+        if (np && np.collection && np.name) {
+          vid.src = nameplateUrl(np);
+          showBox(vid);
+          vid.play().catch(function () {});
+        } else { hideBox(vid); }
+
+        var bannerEl = $("banner");
+        if (u.banner) {
+          bannerEl.style.background =
+            "url(https://cdn.discordapp.com/banners/" + u.id + "/" + u.banner +
+            (u.banner.indexOf("a_") === 0 ? ".gif" : ".png") + "?size=600) center/cover";
+        } else {
+          var probe = new Image();
+          probe.onload = function () {
+            bannerEl.style.background = "url(https://dcdn.dstn.to/banners/" + u.id + ") center/cover";
+          };
+          probe.src = "https://dcdn.dstn.to/banners/" + u.id;
+        }
+
+        if (u.display_name || u.global_name) $("uname").textContent = u.display_name || u.global_name;
+      })
+      .catch(function () {});
+  }
+
+  function load() {
+    fetch("https://api.lanyard.rest/v1/users/" + CONFIG.id)
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res.success) return;
+        render(res.data);
+        setTimeout(load, 15000);
+      })
+      .catch(function () { setTimeout(load, 15000); });
+  }
+
+  function render(d) {
+    var u = d.discord_user;
+    discordUser = u.username;
+
+    $("dot").className = d.discord_status === "offline" ? "" : d.discord_status;
+
+    var av = "https://cdn.discordapp.com/embed/avatars/0.png";
+    if (u.avatar) {
+      av = "https://cdn.discordapp.com/avatars/" + u.id + "/" + u.avatar +
+           (u.avatar.indexOf("a_") === 0 ? ".gif" : ".png") + "?size=256";
+    } else {
+      av = "https://dcdn.dstn.to/avatars/" + u.id;
+    }
+    $("avatar").src = av;
+
+    var deco = $("deco");
+    if (u.avatar_decoration_data && u.avatar_decoration_data.asset && !deco.src) {
+      deco.src = decoPresetUrl(u.avatar_decoration_data.asset);
+      showBox(deco);
+    }
+
+    var vid = $("nameplate");
+    if (!vid.src && u.collectibles && u.collectibles.nameplate &&
+        u.collectibles.nameplate.collection && u.collectibles.nameplate.name) {
+      vid.src = nameplateUrl(u.collectibles.nameplate);
+      showBox(vid);
+      vid.play().catch(function () {});
+    }
+
+    $("handle").textContent = "@" + CONFIG.slug;
+
+    var acts = (d.activities || []).filter(function (a) {
+      return a.type !== 4 && a.name !== "Spotify";
+    });
+    if (acts.length) {
+      $("acts").innerHTML = "";
+      acts.forEach(function (act) {
+        var raw = act.assets && (act.assets.large_image || act.assets.small_image);
+        var art = "";
+        if (raw) {
+          if (raw.indexOf("mp:external/") === 0) art = "https://media.discordapp.net/external/" + raw.slice(12);
+          else if (raw.indexOf("spotify:") === 0) art = "https://i.scdn.co/image/" + raw.slice(8);
+          else art = "https://cdn.discordapp.com/app-assets/" + act.application_id + "/" + raw + ".png";
+        }
+        var div = document.createElement("div");
+        div.className = "act";
+        div.innerHTML =
+          (art ? '<img src="' + art + '" onerror="this.style.display=\'none\'">' : "") +
+          "<div><b>" + escapeHtml(act.name) + "</b>" +
+          (act.details ? "<small>" + escapeHtml(act.details) + "</small>" : "") +
+          (act.state ? "<small>" + escapeHtml(act.state) + "</small>" : "") + "</div>";
+        $("acts").appendChild(div);
+      });
+      showBox($("actbox"));
+    } else {
+      hideBox($("actbox"));
+    }
+
+    var sp = d.spotify;
+    var activelyListening =
+      d.listening_to_spotify === true &&
+      d.discord_status !== "offline" &&
+      sp && sp.track_id && sp.song && sp.artist && sp.album_art_url && sp.timestamps &&
+      typeof sp.timestamps.start === "number" && typeof sp.timestamps.end === "number" &&
+      sp.timestamps.end > sp.timestamps.start;
+
+    if (activelyListening) {
+      var now = Date.now();
+      if (now > sp.timestamps.end + 30000) {
+        hideBox($("spbox"));
+      } else {
+        $("spart").src = sp.album_art_url;
+        $("song").textContent = sp.song;
+        $("song").href = "https://open.spotify.com/track/" + sp.track_id;
+        $("artist").textContent = sp.artist;
+        var pct = ((now - sp.timestamps.start) / (sp.timestamps.end - sp.timestamps.start)) * 100;
+        $("fill").style.width = Math.min(100, Math.max(0, pct)) + "%";
+        showBox($("spbox"));
+      }
+    } else {
+      hideBox($("spbox"));
+    }
+  }
+})();
+</script>
+</body>
+</html>
